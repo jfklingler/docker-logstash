@@ -16,6 +16,7 @@ RUN apk --update add \
       python \
       py-pip \
       bash &&\
+    apk upgrade &&\
     mkdir -p \
       ${LS_CFG_SSL_DIR} \
       ${LS_CFG_FILE_DIR}  \
@@ -25,7 +26,9 @@ RUN apk --update add \
     addgroup ${LS_GROUP} &&\
     adduser -h ${LS_HOME} -D -s /bin/bash -G ${LS_GROUP} ${LS_USER} &&\
     chown -R ${LS_USER}:${LS_GROUP} ${LS_HOME}/ ${LS_CFG_BASE_DIR} &&\
-    chmod 700 ${LS_CFG_SSL_DIR}
+    chmod 700 ${LS_CFG_SSL_DIR} &&\
+    export SSL_CERT_FILE=$LS_HOME/vendor/bundle/jruby/1.9/gems/ftw-0.0.44/lib/ftw/cacert.pem &&\
+    $LS_HOME/bin/plugin install logstash-output-amazon_es
 
 # Configure environment
 COPY src/ /

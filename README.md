@@ -1,3 +1,5 @@
+#### Version 1.5.4 adds logstash-output-amazon_es plugin
+
 ## Logstash Dockerfile
 
 This is a highly configurable [Logstash](https://www.elastic.co/products/logstash) Docker image built using [Docker's automated build](https://registry.hub.docker.com/u/cgswong/logstash/) process and published to the public [Docker Hub Registry](https://registry.hub.docker.com/).
