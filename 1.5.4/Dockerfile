@@ -21,6 +21,7 @@ RUN apk --update add \
       ${LS_CFG_SSL_DIR} \
       ${LS_CFG_FILE_DIR}  \
       /opt &&\
+    /usr/sbin/update-ca-certificates -f &&\
     curl -sSL --insecure --location https://download.elasticsearch.org/logstash/logstash/logstash-${LS_VERSION}.tar.gz | tar zxf - -C /opt &&\
     ln -s /opt/logstash-${LS_VERSION} ${LS_HOME} &&\
     addgroup ${LS_GROUP} &&\
