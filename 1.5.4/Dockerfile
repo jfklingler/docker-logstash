@@ -1,5 +1,5 @@
 # Docker file to create Logstash container.
-FROM cgswong/java:openjre8
+FROM philcryer/min-jessie-jre8
 
 # Setup environment
 ENV LS_VERSION 1.5.4
@@ -11,12 +11,13 @@ ENV LS_USER logstash
 ENV LS_GROUP logstash
 
 # Install requirements and Logstash
-RUN apk --update add \
+RUN export DEBIAN_FRONTEND=noninteractive &&\
+    apt-get update &&\
+    apt-get upgrade -y &&\
+    apt-get install -y \
       curl \
       python \
-      py-pip \
       bash &&\
-    apk upgrade &&\
     mkdir -p \
       ${LS_CFG_SSL_DIR} \
       ${LS_CFG_FILE_DIR}  \
@@ -24,8 +25,8 @@ RUN apk --update add \
     /usr/sbin/update-ca-certificates -f &&\
     curl -sSL --insecure --location https://download.elasticsearch.org/logstash/logstash/logstash-${LS_VERSION}.tar.gz | tar zxf - -C /opt &&\
     ln -s /opt/logstash-${LS_VERSION} ${LS_HOME} &&\
-    addgroup ${LS_GROUP} &&\
-    adduser -h ${LS_HOME} -D -s /bin/bash -G ${LS_GROUP} ${LS_USER} &&\
+    addgroup ${LS_GROUP} --uid 1000 &&\
+    adduser --home ${LS_HOME} --disabled-login --shell /bin/bash -gid 1000 ${LS_USER} &&\
     chown -R ${LS_USER}:${LS_GROUP} ${LS_HOME}/ ${LS_CFG_BASE_DIR} &&\
     chmod 700 ${LS_CFG_SSL_DIR} &&\
     export SSL_CERT_FILE=$LS_HOME/vendor/bundle/jruby/1.9/gems/ftw-0.0.44/lib/ftw/cacert.pem &&\
